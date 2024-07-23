@@ -86,7 +86,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
         'OPTIONS':{
-            'client_encoding': 'LATIN1'
+            'client_encoding': 'UTF-8'
         }
     }
 }
