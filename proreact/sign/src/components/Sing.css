@@ -1,0 +1,11 @@
+.canvas-container{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+.canvas-design{
+    background-color: #dfdfdf;
+    border: solid black 1px;
+    width: 400px;
+    height: 200px;
+}
