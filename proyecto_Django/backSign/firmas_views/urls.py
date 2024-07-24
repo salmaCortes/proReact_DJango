@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
-from .views import FirmasViewSet
+from .import views
 
 router = DefaultRouter()
-router.register(r'firmas', FirmasViewSet, basename='firma')
+router.register(r'firma', views.FirmasViewSet, basename='firma')
 urlpatterns = router.urls
