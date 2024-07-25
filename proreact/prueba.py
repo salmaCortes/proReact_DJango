@@ -126,12 +126,12 @@ def encontrar_coordenadas(pdf_path, patron):
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="firmarModalLabel">Firmar Documento</h5>
-                </div>
+                </div>if request.method == 'POST' and 'firmaguardar2' in request.POST:if request.method == 'POST' and 'firmaguardar2' in request.POST:
                 
                 <div class="modal-body">
                     <form method="POST" onsubmit="guardarFirma({{ documento_pdf.id }})">
                         {% csrf_token %}#aquí
-                        <h5>Coloca el identificador que contiene el contrato.</h5>
+                        <h5>Coloca el identificador quif request.method == 'POST' and 'firmaguardar2' in request.POST:e contiene el contrato.</h5>
                         <p class="fw-medium text-muted fs-6">El nombre del identificador debe ir dentro de corchetes "[ ]"</p>
                         <input type="text" name="identificador" placeholder="Ejemplo: [Firma del cliente]" style="width: 100%;">
                         <canvas class="canvas" id="canvas{{ documento_pdf.id }}" width="253" height="200"></canvas>

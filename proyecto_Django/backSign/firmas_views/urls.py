@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import CrearDocViewSet, FirmarDoc
 
 router = DefaultRouter()
-router.register(r'documentos', CrearDocViewSet, basename='documento')
+router.register(r'crearDoc', CrearDocViewSet, basename='crearDoc')
 
 urlpatterns = [
     path('', include(router.urls)),

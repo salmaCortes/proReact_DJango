@@ -7,11 +7,10 @@ export default function Sign() {
     }, []);
 
     function setupFirmaModal() {
-        var canvas = document.getElementById('canvas');
-        var firmaInput = document.getElementById('firma');
-        var contexto = canvas.getContext('2d');
-        var painting = false;
-
+        const canvas = document.getElementById('canvas');
+        const firmaInput = document.getElementById('firma');
+        const contexto = canvas.getContext('2d');
+        let painting = false;
         canvas.addEventListener('mousedown', function (e) {
             painting = true;
             dibujar(e, canvas, firmaInput, contexto, painting);
@@ -42,6 +41,9 @@ export default function Sign() {
 
             firmaInput.value = canvas.toDataURL();
         }
+
+
+        
     }
 
     function limpiarFirma() {
@@ -68,7 +70,7 @@ export default function Sign() {
             documentoId
         };
 
-        fetch('http://127.0.0.1:8000/firmas/firma/', {
+        fetch('http://127.0.0.1:8000/firmas/firmaDoc/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -97,13 +99,14 @@ export default function Sign() {
                     </div>
                     <br />
                     <input type="hidden" name="firma" id="firma" />
-                    <input type="hidden" name="carpeta" value="nombre_de_la_carpeta" />
-                    <input type="hidden" name="documento" value="nombre_del_documento" />
-                    <input type="hidden" name="documentoId" value="id_del_documento" />
+                    <input type="hidden" name="carpeta" value="media" />
+                    <input type="hidden" name="documento" value="docF" />
+                    <input type="hidden" name="documentoId" value="19" />
                     <br />
                     <div className="d-grid gap-1 justify-content-end d-flex justify-content-center ">
                         <button className="btn btn-primary" type="button" onClick={() => limpiarFirma()}>Limpiar</button>
-                        <button className="btn btn-secondary" type="submit" name="firmaguardar">Guardar Firma</button>
+                        <button className="btn btn-secondary" type="submit" >Guardar Firma</button>
+                        {/* El botón "Guardar Firma" tenía una propiedad nave con valor "firmarguardar"*/}
                     </div>
                 </form>
             </div>

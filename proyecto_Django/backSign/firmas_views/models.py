@@ -13,7 +13,7 @@ class Documento(models.Model):
         return self.nombre
 
 class DocumentoVersion(models.Model):
-    documento_padre = models.ForeignKey(Documento, related_name='versiones', on_delete=models.CASCADE)
+    documento_padre = models.IntegerField(null=True)
     nombre_documento_padre = models.CharField(max_length=255)
     archivo = models.FileField(upload_to='pdfs/')
     carpeta = models.CharField(max_length=255)
