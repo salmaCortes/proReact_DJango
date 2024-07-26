@@ -4,11 +4,12 @@ import "./Sign.css";
 export default function Sign() {
     const [documentos, setDocumentos] = useState([]);
     const [selectedDocumento, setSelectedDocumento] = useState(null);
-    
+
+    //Función para definir los valores iniciales de los inputs de la modal de la firma
     const [modalValores, setModalValores] = useState({
         carpeta: '',
         documento: '',
-        documentoId: null,
+        documentoId: ''
     });
 
     useEffect(() => {
@@ -16,16 +17,17 @@ export default function Sign() {
         setupFirmaModal();
     }, []);
 
-
+    // Función para obtener el objeto(documento clickeado)
     const handleDocumentoClick = (documento) => {
-        console.log('Documento Clickeado:', documento); 
-        setSelectedDocumento(documento);
+        //console.log('Documento Clickeado:', documento);
+        setSelectedDocumento(selectedDocumento === documento ? null : documento); //cambiamos el valor de "selectedDocumento" con "setSelectedDocumento"
     };
 
+    //función para que cuando se de click en el botón "firmar" se le den los valores del documento seleccionado al useState de "modalValores"
     const clickbotonFirmar = () => {
         
         if (selectedDocumento) {
-            console.log("Id del documento clickeado: ", selectedDocumento.id);
+            console.log("Id del documento que se pasó al modal de firmas : ", selectedDocumento.id);
             setModalValores({
                 carpeta: selectedDocumento.carpeta,
                 documento: selectedDocumento.documento,
@@ -36,11 +38,12 @@ export default function Sign() {
         }
     };
 
+    //función para realizar la petición "GET" al servidor de Django
     const obtenerDocumentos = () => {
         fetch('http://127.0.0.1:8000/firmas/crearDoc/')
             .then(response => response.json())
             .then(data => {
-                console.log('Datos recibidos:', data); // Verifica los datos recibidos
+               console.log('Datos recibidos:', data); // Verificar los datos recibidos
                 const documentosPdf = data.filter(documento =>
                     documento.tipo_documento === 'pdf' || documento.tipo_documento === 'PDF'
                 );
@@ -111,6 +114,7 @@ export default function Sign() {
             documentoId
         };
 
+        //Función para realizar la solicitud "POST" al servidor de Django para almacenar la firma en el documento PDF
         fetch('http://127.0.0.1:8000/firmas/firmaDoc/', {
             method: 'POST',
             headers: {
@@ -129,6 +133,7 @@ export default function Sign() {
 
     return (
         <div>
+            {/* Lista de documentos */}
             <div>
                 <h2>Documentos</h2>
                 <ul className='listaDoc'>
