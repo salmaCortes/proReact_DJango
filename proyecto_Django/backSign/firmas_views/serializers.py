@@ -4,4 +4,4 @@ from .models import Documento
 class DocumentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Documento
-        fields = ['documento', 'carpeta', 'tipo_documento', 'descripcion', 'archivo']
+        fields = '__all__'

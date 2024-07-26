@@ -2,25 +2,45 @@ import React, { useState, useEffect } from 'react';
 import "./Sign.css";
 
 export default function Sign() {
-    const [documentos, setDocumentos] = useState([]);//obtener la lista de documentos
-    const [selectedDocumento, setSelectedDocumento] = useState(null);//obtener el documento clickeado
+    const [documentos, setDocumentos] = useState([]);
+    const [selectedDocumento, setSelectedDocumento] = useState(null);
+    
+    const [modalValores, setModalValores] = useState({
+        carpeta: '',
+        documento: '',
+        documentoId: null,
+    });
 
     useEffect(() => {
         obtenerDocumentos();
         setupFirmaModal();
     }, []);
 
-    //Handle para controlar cuando se hace click en un documento de la lista de documentos
+
     const handleDocumentoClick = (documento) => {
+        console.log('Documento Clickeado:', documento); 
         setSelectedDocumento(documento);
     };
 
-    //Petición GET para Obtener los documentos de la BD de postgres
+    const clickbotonFirmar = () => {
+        
+        if (selectedDocumento) {
+            console.log("Id del documento clickeado: ", selectedDocumento.id);
+            setModalValores({
+                carpeta: selectedDocumento.carpeta,
+                documento: selectedDocumento.documento,
+                documentoId: selectedDocumento.id
+            });
+        } else {
+            console.error('Error: No hay documento seleccionado o el ID del documento no es válido');
+        }
+    };
+
     const obtenerDocumentos = () => {
         fetch('http://127.0.0.1:8000/firmas/crearDoc/')
             .then(response => response.json())
             .then(data => {
-                // Mostrar documentos con el atributo "tipo_documento" "pdf" o "PDF"
+                console.log('Datos recibidos:', data); // Verifica los datos recibidos
                 const documentosPdf = data.filter(documento =>
                     documento.tipo_documento === 'pdf' || documento.tipo_documento === 'PDF'
                 );
@@ -28,7 +48,7 @@ export default function Sign() {
             })
             .catch(error => console.error('Error al obtener los documentos a firmar:', error));
     };
-
+    
 
     function setupFirmaModal() {
         const canvas = document.getElementById('canvas');
@@ -75,13 +95,13 @@ export default function Sign() {
         contexto.clearRect(0, 0, canvas.width, canvas.height);
         firmaInput.value = '';
     }
-    //petición POST al servidor de Django para guardar la imagen de la firma en el documento que se tiene que firmar
+
     function guardarFirma() {
         const firma = document.getElementById('firma').value;
         const identificador = document.querySelector('input[name="identificador"]').value;
-        const carpeta = document.querySelector('input[name="carpeta"]').value;
-        const documento = document.querySelector('input[name="documento"]').value;
-        const documentoId = document.querySelector('input[name="documentoId"]').value;
+        const carpeta = modalValores.carpeta;
+        const documento = modalValores.documento;
+        const documentoId = modalValores.documentoId;
 
         const data = {
             firma,
@@ -101,7 +121,6 @@ export default function Sign() {
         .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
-            
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -110,14 +129,13 @@ export default function Sign() {
 
     return (
         <div>
-            {/*Lista de documentos*/}
-           <div>
+            <div>
                 <h2>Documentos</h2>
                 <ul className='listaDoc'>
                     {documentos.map((documento, index) => (
                         <li
                             key={index}
-                            className={ selectedDocumento === documento ? 'selected' : ''}
+                            className={selectedDocumento === documento ? 'selected' : ''}
                             onClick={() => handleDocumentoClick(documento)}
                         >
                             {documento.documento}
@@ -126,7 +144,7 @@ export default function Sign() {
                 </ul>
             </div>
 
-            <button>Firmar</button>
+            <button onClick={clickbotonFirmar}>Firmar</button>
 
             <div className='container mt-5 p-5'>
                 <div className="modal-body">
@@ -139,9 +157,9 @@ export default function Sign() {
                         </div>
                         <br />
                         <input type="hidden" name="firma" id="firma" />
-                        <input type="hidden" name="carpeta" value="media" />
-                        <input type="hidden" name="documento" value="docF" />
-                        <input type="hidden" name="documentoId" value="23" />
+                        <input type="hidden" name="carpeta" value={modalValores.carpeta} />
+                        <input type="hidden" name="documento" value={modalValores.documento} />
+                        <input type="hidden" name="documentoId" value={modalValores.documentoId} />
                         <br />
                         <div className="d-grid gap-1 justify-content-end d-flex justify-content-center ">
                             <button className="btn btn-primary" type="button" onClick={() => limpiarFirma()}>Limpiar</button>
@@ -150,7 +168,6 @@ export default function Sign() {
                     </form>
                 </div>
             </div>
-            
         </div>
     );
 }
