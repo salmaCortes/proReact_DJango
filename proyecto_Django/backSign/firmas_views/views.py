@@ -16,6 +16,13 @@ import shutil
 #NOTA: RECUERDA QUE LAS CARPETAS MENCIONADAS EN ESTE CÓDIGO, SON SUBCARPETAS QUE SE CREARÁN en la carpeta definida en   ruta_pdf_original
 # que en este caso es la carpeta "media"
 class CrearDocViewSet(viewsets.ViewSet):
+    
+    # Método para obtener los documentos PDFs a firmar
+    def list(self, request):
+        if request.method == 'GET':
+            documentos = Documento.objects.all()
+            serializer = DocumentoSerializer(documentos, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
     #SUbir el documento pdf a firmar 
@@ -124,7 +131,7 @@ class FirmarDoc(APIView):
                 data = ContentFile(base64.b64decode(imgstr), name='firma.{}'.format(ext))
                 ubicacion = os.path.join('firmas_generadas', data.name) #nombre de la carpeta en donde se guardará la firma
 
-                # Crear una instancia de Documento p para que en la tabla de la identidad "Documento", guardar la firma generada por el usuario
+                # Crear una instancia de la clase "Documento" para que en la tabla de la entidad "Documento", guardar la firma generada por el usuario
                 contratoFirmado = Documento(
                     documento="Firma_generada_por_usuario",
                     carpeta=carpeta,
@@ -134,10 +141,11 @@ class FirmarDoc(APIView):
                 contratoFirmado.archivo.save(ubicacion, data, save=True)# se guarda la firma
 
                 # Ruta del archivo original y archivo de salida PDF
-                ruta_pdf_original = os.path.join(settings.MEDIA_ROOT, documentoparafirmar.archivo.name)#obtiene el nombre del archivo pdf a  firmar
+                ruta_pdf_original = os.path.join(settings.MEDIA_ROOT, documentoparafirmar.archivo.name)#obtiene el nombre del archivo pdf a  firmar gracias al " input field" de la clase "Documento"
                 rutaArchivo = os.path.join(documentoparafirmar.archivo.name )#aquí es de con que nombre se va a guardar el documento pdf firmado y en que carpeta se guardará
                                                                             #que en este caso, es para guardarlo en "media/documentos"porque dije en "models.py" que los 
                                                                             #documentos se guarden en la subcarpeta "documentos"
+                                                                            
                 pdf_output = os.path.join(settings.MEDIA_ROOT, rutaArchivo) #pdf_output es el path final del documento ya firmado
 
                 # Encontrar coordenadas del patrón(identificador) en el PDF

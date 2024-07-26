@@ -9,3 +9,17 @@
     width: 400px;
     height: 200px;
 }
+
+button{
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+.listaDoc {
+    cursor: pointer;
+}
+  
+.listaDoc .selected {
+    background-color: #e0e0e0; 
+    border: 1px solid #000;    
+}
+  

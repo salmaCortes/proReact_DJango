@@ -19,6 +19,9 @@ media
 # Byte-compiled / optimized / DLL files
 *.py[cod]
 *$py.class
+#esto es para no subir la imagen temporal de la firma del proyecto de django a github
+temp_image.png 
+
 
 # C extensions
 *.so
